@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Tuple
 
 class Note():
     def __init__(self, type: str, message: str):
@@ -17,9 +18,14 @@ class Collector():
         else:
             self.collection[t] = [msg]
 
-def validate_paths(*paths, collector: Collector):
+def validate_path(*paths) -> list:
+
+    message_list = []
 
     for p in paths:
-        if not p.exists(): collector.add(Note("error", f"{p} does not exist"))
+        if not p.exists():
+            message_list.append(p)
+
+    return message_list
 
     
