@@ -57,7 +57,8 @@ script_arguments_list = {
         'args': [
             StringArg("file1", "Compared file [file1].", required=True, shortcut="f1"),
             StringArg("file2", "Compared file [file2].", required=True, shortcut="f2"),
-            DefaultArg("result", "Folder for report storage.", value="results", required=False, shortcut="r")
+            DefaultArg("result", "Folder for report storage.", value="results", required=False, shortcut="r"),
+            StringArg("sheet", "Specific excel sheet to be compared.", required=False, shortcut="st")
         ]
     }
 }

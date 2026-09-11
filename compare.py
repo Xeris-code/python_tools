@@ -2,11 +2,17 @@ from sys import exit
 from os import makedirs
 from pathlib import Path
 
+from openpyxl import load_workbook
+
 from common.script_base import ScriptBase
 from common.cli import script_arguments_list as cli_list
 
-from common.validation import validate_path, Collector
 from common.helpers import make_path
+
+class Excel():
+    def __init__(self, path):
+        self.wb = load_workbook(path, data_only=True)
+        self.sheets = self.wb.sheetnames
 
 
 class Compare(ScriptBase):
@@ -15,13 +21,27 @@ class Compare(ScriptBase):
         self.f1_dir = make_path(self.cli.args.f1)
         self.f2_dir = make_path(self.cli.args.f2)
         self.results_dir = make_path(self.cwd, self.cli.args.r)
-        self.results_dir2 = make_path(self.cwd, Path("common/file"))
+
+        self.sheet = self.cli.args.st
 
     def run(self):
         if not self.validate_input_paths(self.f1_dir, self.f2_dir):
             return
         if not self.validate_output_paths(self.results_dir):
             return
+
+        if self.sheet:
+            print(f"Comparing sheet: {self.sheet}")
+        else:
+            print(f"Comparing all XY sheets")
+
+        excel1 = Excel(self.f1_dir)
+        excel2 = Excel(self.f2_dir)
+
+        if excel1.sheets != excel2.sheets:
+            print("excel sheet not comparable")
+        else:
+            print("excel sheets comparable")
 
         print(f"Saving the report...")
         saved = True
